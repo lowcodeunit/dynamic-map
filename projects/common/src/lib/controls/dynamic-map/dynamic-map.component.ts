@@ -19,8 +19,15 @@ export class DynamicMapComponent implements OnInit {
   public CurrentMapModel: IndividualMap;
 
   // PROPERTIES
+  
+  /**
+   * Boolean that determines whether or not the user is in the middle of a double-click
+   */
   private isDoubleClick: boolean = false;
 
+  /**
+   * The maximum amount of time in milliseconds the average person expects between clicks of a double-click
+   */
   private expectedDoubleClickElapsedTime: number = 500;
 
   /**
@@ -31,16 +38,17 @@ export class DynamicMapComponent implements OnInit {
     origin: { lat: 40.037757, lng: -105.278324 },
     zoom: 13,
     locationList: [
-      { title: 'Favorite steak house', lat: 40.017557, lng: -105.278199, icon: 'restaurant' },
-      { title: 'Favorite UNESCO', lat: 40.027657, lng: -105.288199, icon: 'UNESCO' },
-      { title: 'Nice museum', lat: 40.037757, lng: -105.298199, icon: 'museum' },
-      { title: 'Good brewery', lat: 40.047857, lng: -105.268199, icon: 'brewery' },
-      { title: 'Favorite ski area', lat: 40.057557, lng: -105.288199, icon: 'ski area' },
-      { title: 'Favorite vineyard', lat: 40.060657, lng: -105.298199, icon: 'vineyard' },
-      { title: 'Nice golf course', lat: 40.037757, lng: -105.258199, icon: 'golf course' },
-      { title: 'Good lodging', lat: 40.037757, lng: -105.278199, icon: 'lodging' },
-      { title: 'Nice national park', lat: 40.060657, lng: -105.278199, icon: 'national park' },
-      { title: 'Good bar', lat: 40.017557, lng: -105.288199, icon: 'bar' }
+      // these image urls will not work as a default for projects that bring this in and don't have these exact names / icons
+      { title: 'Favorite steak house', lat: 40.017557, lng: -105.278199, iconName: 'restaurant', iconImageUrl: './assets/restaurant.png' },
+      { title: 'Favorite UNESCO', lat: 40.027657, lng: -105.288199, iconName: 'UNESCO', iconImageUrl: './assets/UNESCO.png' },
+      { title: 'Nice museum', lat: 40.037757, lng: -105.298199, iconName: 'museum', iconImageUrl: './assets/museum.png' },
+      { title: 'Good brewery', lat: 40.047857, lng: -105.268199, iconName: 'brewery', iconImageUrl: './assets/brewery.png' },
+      { title: 'Favorite ski area', lat: 40.057557, lng: -105.288199, iconName: 'ski area', iconImageUrl: './assets/ski area.png' },
+      { title: 'Favorite vineyard', lat: 40.060657, lng: -105.298199, iconName: 'vineyard', iconImageUrl: './assets/vineyard.png' },
+      { title: 'Nice golf course', lat: 40.037757, lng: -105.258199, iconName: 'golf course', iconImageUrl: './assets/golf course.png' },
+      { title: 'Good lodging', lat: 40.037757, lng: -105.278199, iconName: 'lodging', iconImageUrl: './assets/lodging.png' },
+      { title: 'Nice national park', lat: 40.060657, lng: -105.278199, iconName: 'national park', iconImageUrl: './assets/national park.png' },
+      { title: 'Good bar', lat: 40.017557, lng: -105.288199, iconName: 'bar', iconImageUrl: './assets/bar.png' }
     ]
   };
 
@@ -51,9 +59,8 @@ export class DynamicMapComponent implements OnInit {
   ngOnInit() {
     this.CurrentMapModel = this.mapModel;
     this.CurrentMapModel.locationList.forEach(loc => {
-      loc.icon = this.mapService.ConvertIconUrl(loc.icon);
+      loc.iconImageUrl = this.mapService.ConvertIconUrl(loc.iconImageUrl);
     });
-    // this.CurrentMapModel.locationList = this.convertMarkerUrls(this.CurrentMapModel.locationList);
   }
 
   // API METHODS
@@ -62,7 +69,7 @@ export class DynamicMapComponent implements OnInit {
    * 
    * @param event The event passed in upon user clicking the map
    * 
-   * Runs when user clicks location on map. Modal displays prompting user to enter info about custom location marker
+   * Runs when user single-clicks location on map. Modal displays prompting user to enter info about custom location marker
    */
   public OnChoseLocation(event): void {
     setTimeout(x => { // set timeout to half a second to wait for possibility of double click (mimic Google Maps)
@@ -70,7 +77,8 @@ export class DynamicMapComponent implements OnInit {
         const dialogRef = this.dialog.open(AddMapMarkerComponent, {
           data: {
             lat: event.coords.lat,
-            lng: event.coords.lng
+            lng: event.coords.lng,
+            iconList: this.mapModel.locationList
           }
         });
         dialogRef.afterClosed().subscribe(res => {
@@ -82,6 +90,14 @@ export class DynamicMapComponent implements OnInit {
     }, this.expectedDoubleClickElapsedTime);
   }
 
+  /**
+   * 
+   * @param event The event passed in upon user double-clicking the map
+   * 
+   * Function that sets property 'isDoubleClicked' to true for a moment.
+   * 
+   * This is necessary because when the events 'mapClick' and 'mapDblClick' appear on the same component, both will be fired
+   */
   public OnMapDoubleClicked(event) {
     this.isDoubleClick = true;
     console.log('double clicked');

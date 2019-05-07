@@ -11,11 +11,9 @@ export class MapService {
    * 
    * @param icon The icon to be converted to a path
    * 
-   * Converts icon to path for use in displaying custom icon as map location marker
+   * Converts icon path to object for use in displaying custom icon as map location marker
    */
-  public ConvertIconUrl(icon) {
-    let orig = icon;
-    let iconUrl = `./assets/${orig}.png`;
+  public ConvertIconUrl(iconUrl) {
     return { url: iconUrl, scaledSize: { width: 40, height: 60 } };
   }
 }

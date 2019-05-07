@@ -38,14 +38,16 @@ export class AddMapMarkerComponent implements OnInit {
       title: new FormControl('', { validators: [Validators.required] }),
       icon: new FormControl('', { validators: [Validators.required] })
     });
+
     this.NewMarker = {
       title: '',
-      icon: null,
-      lat: 40.00,
-      lng: -100
+      iconName: null,
+      iconImageUrl: '',
+      lat: 0,
+      lng: 0
     }
-    // make these into a constants file somewhere because this list is written somewhere else as well
-    this.IconList = ['bar', 'brewery', 'golf course', 'lodging', 'museum', 'national park', 'restaurant', 'ski area', 'UNESCO', 'vineyard'];
+    
+    this.IconList = this.passedData.iconList; 
   }
   
   // API METHODS
@@ -55,10 +57,11 @@ export class AddMapMarkerComponent implements OnInit {
    */
   public SetMarkerData(): void {
     this.NewMarker.title = this.NewMarkerForm.value.title;
-    this.NewMarker.icon = this.NewMarkerForm.value.icon;
+    this.NewMarker.iconName = this.NewMarkerForm.value.icon.iconName;
     this.NewMarker.lat = this.passedData.lat;
     this.NewMarker.lng = this.passedData.lng;
-    this.NewMarker.icon = this.mapService.ConvertIconUrl(this.NewMarker.icon);
+    this.NewMarker.iconImageUrl = this.mapService.ConvertIconUrl(this.NewMarkerForm.value.icon.iconImageUrl.url);
+
   }
   // HELPERS
 }
