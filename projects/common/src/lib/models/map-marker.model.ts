@@ -6,21 +6,9 @@ export class MapMarker {
     title: string;
 
     /**
-     * A list of available icons to customize map locations
+     * The icon name to be displayed in a list of icon names
      */
-    icon: 
-    'bar' |
-    'brewery' |
-    'golf course' |
-    'lodging' |
-    'museum' |
-    'national park' |
-    'restaurant' |
-    'ski area' |
-    'UNESCO' |
-    'vineyard' |
-    null | 
-    {};
+    iconName: string | null | {};
 
     /**
      * The latitude of the map marker
@@ -33,12 +21,18 @@ export class MapMarker {
     lng: number;
 
     /**
+     * The path to the image in the file system
+     */
+    iconImageUrl: string | {};
+
+    /**
      * 
      * @param icon The object containing data for a single point (a map marker) on a map (<agm-map>)
      */
     constructor(icon: MapMarker) {
         this.title = icon.title;
-        this.icon = icon.icon;
+        this.iconName = icon.iconName;
+        this.iconImageUrl = icon.iconImageUrl;
         this.lat = icon.lat;
         this.lng = icon.lng;
     }

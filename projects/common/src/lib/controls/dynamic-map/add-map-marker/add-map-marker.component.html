@@ -1,5 +1,4 @@
-<h1 mat-dialog-title>Add a marker here?</h1>
-
+<h1 mat-dialog-title>Add Marker</h1>
 
 <mat-dialog-content>
   <form fxLayout="column" fxLayoutAlign="center center" [formGroup]="NewMarkerForm" fxLayoutGap="30px">
@@ -13,14 +12,12 @@
     <h4>Choose Icon:</h4>
     <mat-form-field>
       <mat-label>Icon</mat-label>
-      <mat-select formControlName="icon">
-        <mat-option *ngFor="let icon of IconList" [value]="icon">{{icon}}</mat-option>
+      <mat-select formControlName="icon"> 
+        <mat-option *ngFor="let icon of IconList" [value]="icon">{{icon.iconName}}</mat-option>
       </mat-select>
     </mat-form-field>
-
   </form>
 </mat-dialog-content>
-
 
 <button mat-raised-button color="primary" [mat-dialog-close]="NewMarker" (click)="SetMarkerData()"
   [disabled]="NewMarkerForm.invalid">Add Marker</button>
